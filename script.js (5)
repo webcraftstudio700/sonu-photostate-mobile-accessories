@@ -1,0 +1,585 @@
+/* =========================================
+   SONU PHOTOSTATE & MOBILE ACCESSORIES
+   MAIN JAVASCRIPT
+========================================= */
+
+/* =========================================
+   MOBILE NAVBAR
+========================================= */
+
+const menuToggle = document.getElementById("menuToggle");
+const navLinks = document.querySelector(".nav-links");
+
+if (menuToggle && navLinks) {
+
+    menuToggle.addEventListener("click", () => {
+
+        navLinks.classList.toggle("show");
+
+        const icon = menuToggle.querySelector("i");
+
+        if (navLinks.classList.contains("show")) {
+
+            icon.classList.remove("fa-bars");
+            icon.classList.add("fa-xmark");
+
+        } else {
+
+            icon.classList.remove("fa-xmark");
+            icon.classList.add("fa-bars");
+
+        }
+
+    });
+
+
+    /* Close mobile menu after clicking a link */
+
+    const navItems = navLinks.querySelectorAll("a");
+
+    navItems.forEach((item) => {
+
+        item.addEventListener("click", () => {
+
+            navLinks.classList.remove("show");
+
+            const icon = menuToggle.querySelector("i");
+
+            icon.classList.remove("fa-xmark");
+            icon.classList.add("fa-bars");
+
+        });
+
+    });
+
+}
+
+
+/* =========================================
+   STICKY NAVBAR SCROLL EFFECT
+========================================= */
+    const header = document.querySelector(".header");
+
+if (header) {
+
+    window.addEventListener("scroll", () => {
+
+        if (window.scrollY > 30) {
+
+            header.classList.add("scrolled");
+
+        } else {
+
+            header.classList.remove("scrolled");
+
+        }
+
+    });
+
+}
+
+/* =========================================
+   HOME HERO SLIDER
+========================================= */
+
+const heroSlides = document.querySelectorAll(".hero-slide");
+const sliderDots = document.querySelectorAll(".slider-dots .dot");
+
+let currentSlide = 0;
+let slideTimer;
+
+
+function showSlide(index) {
+
+    if (!heroSlides.length) {
+        return;
+    }
+
+
+    heroSlides.forEach((slide) => {
+
+        slide.classList.remove("active");
+
+    });
+
+
+    sliderDots.forEach((dot) => {
+
+        dot.classList.remove("active");
+
+    });
+
+
+    heroSlides[index].classList.add("active");
+
+    if (sliderDots[index]) {
+
+        sliderDots[index].classList.add("active");
+
+    }
+
+
+    currentSlide = index;
+}
+
+
+/* ---------- NEXT SLIDE ---------- */
+
+function nextSlide() {
+
+    let nextIndex =
+        (currentSlide + 1) % heroSlides.length;
+
+    showSlide(nextIndex);
+
+}
+
+
+/* ---------- AUTO SLIDER ---------- */
+
+function startSlider() {
+
+    if (heroSlides.length > 1) {
+
+        slideTimer = setInterval(
+            nextSlide,
+            5000
+        );
+
+    }
+
+}
+
+
+/* ---------- DOT CLICK ---------- */
+
+sliderDots.forEach((dot, index) => {
+
+    dot.addEventListener("click", () => {
+
+        showSlide(index);
+
+
+        clearInterval(slideTimer);
+
+        startSlider();
+
+    });
+
+});
+
+
+/* ---------- START ---------- */
+
+showSlide(0);
+
+startSlider();/* =========================================
+   IMAGE LIGHTBOX
+========================================= */
+
+const images = document.querySelectorAll(
+    ".featured-image img, " +
+    ".why-image img, " +
+    ".mobile-feature-image img, " +
+    ".stationery-feature-image img, " +
+    ".stationery-services-image img, " +
+    ".digital-service-image img, " +
+    ".service-center-image img, " +
+    ".mobile-gallery-image img"
+);
+
+/* Create Lightbox */
+
+const lightbox = document.createElement("div");
+
+lightbox.className = "lightbox";
+
+lightbox.innerHTML = `
+    <button class="lightbox-close"
+            aria-label="Close image">
+        <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <img class="lightbox-image"
+         src=""
+         alt="">
+`;
+
+
+document.body.appendChild(lightbox);
+
+
+const lightboxImage =
+    lightbox.querySelector(".lightbox-image");
+
+const closeLightbox =
+    lightbox.querySelector(".lightbox-close");
+
+
+/* Open Image */
+
+images.forEach((image) => {
+
+    image.classList.add("clickable-image");
+
+    image.addEventListener("click", (event) => {
+
+        event.preventDefault();
+
+        event.stopPropagation();
+
+        lightboxImage.src = image.src;
+
+        lightboxImage.alt = image.alt;
+
+        lightbox.classList.add("active");
+
+    });
+
+});
+
+
+/* Close Button */
+
+closeLightbox.addEventListener("click", () => {
+
+    lightbox.classList.remove("active");
+
+});
+
+
+/* Close When Clicking Outside Image */
+
+lightbox.addEventListener("click", (event) => {
+
+    if (event.target === lightbox) {
+
+        lightbox.classList.remove("active");
+
+    }
+
+});
+
+
+/* Close With ESC Key */
+
+document.addEventListener("keydown", (event) => {
+
+    if (event.key === "Escape") {
+
+        lightbox.classList.remove("active");
+
+    }
+
+});
+/* =========================================
+   SHOPPING CART & WHATSAPP ORDER
+========================================= */
+
+const shopProducts = {
+    "bwm-v8-123": {
+        name: "BWM 45W Dynamic Super Fast Charge & Sync Micro Cable",
+        price: 199
+    },
+    "bwm-emperor-121": {
+        name: "BWM Emperor Series 45W Micro Data Cable",
+        price: 249
+    },
+    "kinshu-dual-20w": {
+        name: "Kinshu Quick & Fast 20W Dual USB Charger",
+        price: 299
+    },
+    "kinshu-single-15w": {
+    name: "Kinshu 15W Quick & Fast Single USB Charger with Cable",
+    price: 199
+},
+
+"boom-tyre-speaker": {
+    name: "BOOM Wireless Bass Tyre Speaker",
+    price: 449
+},
+
+"bluebeatz-soundbar": {
+    name: "Blue Beatz Befikre Soundbar Speaker",
+    price: 899
+},
+
+"oppo-130w-cable": {
+    name: "OPPO 130W VOOC Fast Type-C to Type-C Cable",
+    price: 299
+},
+
+"sleekon-v8": {
+    name: "Sleekon SKN 1003 V8 Data Cable",
+    price: 319
+},
+
+"kinshu-rainbow-v8": {
+    name: "Kinshu Rainbow Series 100W V8 Data Cable",
+    price: 349
+},
+
+"apple-pd-cable": {
+    name: "Apple PD Data Cable",
+    price: 299
+},
+
+"boat-220": {
+    name: "boAt Type-C Earphone BOAT-220",
+    price: 169
+},
+
+"aroma-hf504": {
+    name: "Aroma HF504 Earphone 3.5 mm Jack",
+    price: 119
+},
+
+"boat-261": {
+    name: "boAt Type-C Earphone BOAT-261",
+    price: 169
+}
+};
+
+
+let shoppingCart = {};
+
+const cartItemsBox = document.getElementById("cartItems");
+const cartCountBox = document.getElementById("cartCount");
+const cartTotalBox = document.getElementById("cartTotal");
+
+
+function updateCart() {
+
+    if (!cartItemsBox) return;
+
+    cartItemsBox.innerHTML = "";
+
+    const productIds = Object.keys(shoppingCart);
+
+    let total = 0;
+    let itemCount = 0;
+
+    if (productIds.length === 0) {
+        cartItemsBox.innerHTML =
+            '<p class="cart-empty">Your cart is empty. Add a product to get started.</p>';
+    }
+
+    productIds.forEach(id => {
+
+        const product = shopProducts[id];
+        const quantity = shoppingCart[id];
+
+        const subtotal = product.price * quantity;
+
+        total += subtotal;
+        itemCount += quantity;
+
+        const item = document.createElement("div");
+
+        item.className = "cart-item";
+
+        const details = document.createElement("div");
+
+        const name = document.createElement("h4");
+        name.textContent = product.name;
+
+        const price = document.createElement("p");
+        price.className = "cart-item-price";
+        price.textContent = `₹${product.price} × ${quantity} = ₹${subtotal}`;
+
+        details.append(name, price);
+
+        const controls = document.createElement("div");
+        controls.className = "cart-item-controls";
+
+        const decrease = document.createElement("button");
+        decrease.className = "cart-qty-btn";
+        decrease.textContent = "−";
+        decrease.setAttribute("aria-label", "Decrease quantity");
+        decrease.addEventListener("click", () => {
+            if (shoppingCart[id] > 1) {
+                shoppingCart[id]--;
+            } else {
+                delete shoppingCart[id];
+            }
+            updateCart();
+        });
+
+        const quantityText = document.createElement("span");
+        quantityText.textContent = quantity;
+
+        const increase = document.createElement("button");
+        increase.className = "cart-qty-btn";
+        increase.textContent = "+";
+        increase.setAttribute("aria-label", "Increase quantity");
+        increase.addEventListener("click", () => {
+            shoppingCart[id]++;
+            updateCart();
+        });
+
+        const remove = document.createElement("button");
+        remove.className = "cart-remove-btn";
+        remove.innerHTML = '<i class="fa-solid fa-trash"></i>';
+        remove.setAttribute("aria-label", "Remove product");
+        remove.addEventListener("click", () => {
+            delete shoppingCart[id];
+            updateCart();
+        });
+
+        controls.append(decrease, quantityText, increase, remove);
+        item.append(details, controls);
+        cartItemsBox.appendChild(item);
+
+    });
+
+    cartCountBox.textContent =
+        `${itemCount} ${itemCount === 1 ? "item" : "items"}`;
+
+    cartTotalBox.textContent = `₹${total}`;
+}
+
+
+/* ADD TO CART */
+
+document.querySelectorAll("[data-add]").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        const id = button.dataset.add;
+
+        if (!shopProducts[id]) return;
+
+        shoppingCart[id] = (shoppingCart[id] || 0) + 1;
+
+        updateCart();
+
+        const originalText = button.innerHTML;
+
+        button.innerHTML =
+            '<i class="fa-solid fa-check"></i> Added';
+
+        setTimeout(() => {
+            button.innerHTML = originalText;
+        }, 1000);
+
+    });
+
+});
+
+
+/* WHATSAPP CHECKOUT */
+
+const whatsappOrderButton =
+    document.getElementById("whatsappOrder");
+
+if (whatsappOrderButton) {
+
+    whatsappOrderButton.addEventListener("click", () => {
+
+        const productIds = Object.keys(shoppingCart);
+
+        if (productIds.length === 0) {
+            alert("Please add at least one product to your cart.");
+            return;
+        }
+
+        const customerName =
+            document.getElementById("customerName").value.trim();
+
+        const customerPhone =
+            document.getElementById("customerPhone").value.trim();
+
+        const customerAddress =
+            document.getElementById("customerAddress").value.trim();
+
+        if (!customerName || !customerPhone) {
+            alert("Please enter your name and mobile number.");
+            return;
+        }
+
+        const phoneDigits = customerPhone.replace(/\D/g, "");
+
+        if (!/^\d{10}$/.test(phoneDigits)) {
+            alert("Please enter a valid 10-digit mobile number.");
+            return;
+        }
+
+        let total = 0;
+
+        let message =
+            "Hello Sonu Photostate & Mobile Accessories!\n\n" +
+            "I would like to place an order:\n\n";
+
+        productIds.forEach((id, index) => {
+
+            const product = shopProducts[id];
+            const quantity = shoppingCart[id];
+            const subtotal = product.price * quantity;
+
+            total += subtotal;
+
+            message +=
+                `${index + 1}. ${product.name}\n` +
+                `Quantity: ${quantity}\n` +
+                `Price: ₹${product.price}\n` +
+                `Subtotal: ₹${subtotal}\n\n`;
+
+        });
+
+        message +=
+            `Total Amount: ₹${total}\n\n` +
+            `Customer Name: ${customerName}\n` +
+            `Mobile Number: ${customerPhone}\n`;
+
+        if (customerAddress) {
+            message += `Address / Pickup Details: ${customerAddress}\n`;
+        }
+
+        message +=
+            "\nPlease confirm product availability and order details. Thank you!";
+
+        const whatsappURL =
+            "https://wa.me/919541671094?text=" +
+            encodeURIComponent(message);
+
+        window.open(whatsappURL, "_blank");
+
+    });
+
+}
+
+updateCart();
+// PRODUCT IMAGE ZOOM
+
+const productImages = document.querySelectorAll(".product-zoom-img");
+
+const productPopup = document.getElementById("productImagePopup");
+const productPopupImage = document.getElementById("productPopupImage");
+const productPopupClose = document.getElementById("productPopupClose");
+
+productImages.forEach(function (img) {
+
+    img.addEventListener("click", function (event) {
+ event.preventDefault();
+        productPopupImage.src = this.src;
+        productPopupImage.alt = this.alt;
+
+        productPopup.classList.add("active");
+
+    });
+
+});
+if (productPopup && productPopupImage && productPopupClose) {
+productPopupClose.addEventListener("click", function () {
+    productPopup.classList.remove("active");
+});
+
+productPopup.addEventListener("click", function (event) {
+
+    if (event.target === productPopup) {
+        productPopup.classList.remove("active");
+    }
+
+});
+
+}
